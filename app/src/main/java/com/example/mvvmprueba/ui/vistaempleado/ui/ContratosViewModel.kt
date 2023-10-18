@@ -1,4 +1,4 @@
-package com.example.mvvmprueba.ui.vistacliente.ui
+package com.example.mvvmprueba.ui.vistaempleado.ui
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

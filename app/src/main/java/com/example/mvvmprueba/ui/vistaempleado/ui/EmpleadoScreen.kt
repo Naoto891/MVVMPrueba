@@ -1,4 +1,4 @@
-package com.example.mvvmprueba.ui.vistacliente.ui
+package com.example.mvvmprueba.ui.vistaempleado.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,18 +22,18 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun ClientScreen(viewModel: ClientViewModel) {
+fun EmpleadoScreen(viewModel: EmpleadoViewModel) {
     Box(
         Modifier
             .fillMaxSize()
             .background(Color(0xFF1c4c96))
     ) {
-        Client(Modifier.align(Alignment.Center), viewModel)
+        Empleado(Modifier.align(Alignment.Center), viewModel)
     }
 }
 
 @Composable
-fun Client(modifier: Modifier, viewModel: ClientViewModel) {
+fun Empleado(modifier: Modifier, viewModel: EmpleadoViewModel) {
 
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val isContratoIn: Boolean by viewModel.isContratoIn.observeAsState(initial = false)
@@ -65,6 +65,8 @@ fun Client(modifier: Modifier, viewModel: ClientViewModel) {
                     viewModel.onContratoSelected()
                 }
             }
+            Spacer(modifier = Modifier.padding(16.dp))
+            CotizacionesButton{}
             Spacer(modifier = Modifier.padding(75.dp))
         }
     }
@@ -84,6 +86,23 @@ fun ContratosButton( onContratoSelected: () -> Unit) {
         )
     ) {
         Text(text = "Contratos")
+    }
+}
+
+@Composable
+fun CotizacionesButton( onCotizacionSelected: () -> Unit) {
+    Button(
+        onClick = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .padding(40.dp, 0.dp),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.White,
+            disabledContentColor = Color.White
+        )
+    ) {
+        Text(text = "Cotizaciones")
     }
 }
 

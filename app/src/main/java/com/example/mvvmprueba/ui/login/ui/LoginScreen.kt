@@ -28,8 +28,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mvvmprueba.R
-import com.example.mvvmprueba.ui.vistacliente.ui.ClientScreen
-import com.example.mvvmprueba.ui.vistacliente.ui.ClientViewModel
+import com.example.mvvmprueba.ui.vistaempleado.ui.EmpleadoViewModel
+import com.example.mvvmprueba.ui.vistaempleado.ui.EmpleadoScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -58,7 +58,7 @@ fun Login(modifier: Modifier, viewModel: LoginViewModel) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         }
     } else if(isLoggedIn){
-        ClientScreen(ClientViewModel())
+        EmpleadoScreen(EmpleadoViewModel())
     } else {
         Column(modifier = modifier) {
             HeaderImage(

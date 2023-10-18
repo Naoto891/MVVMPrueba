@@ -1,4 +1,4 @@
-package com.example.mvvmprueba.ui.vistacliente.ui
+package com.example.mvvmprueba.ui.vistaempleado.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -53,15 +53,15 @@ fun ContratosScreen() {
             .background(Color(0xFF1c4c96)),
         contentAlignment = Alignment.TopCenter
     ) {
-        UserDataList(Modifier)
+        ContratoDataList(Modifier)
     }
 }
 @Composable
-fun UserDataList(modifier: Modifier) {
+fun ContratoDataList(modifier: Modifier) {
 
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(1) }
     var prueba by remember { mutableStateOf(false)}
-    val list = listOf("Contratos Pendientes", "Contratos Completados")
+    val list = listOf("Crear Contratos","Contratos Pendientes", "Contratos Completados")
 
 
     Column(modifier = modifier) {
@@ -109,12 +109,14 @@ fun UserDataList(modifier: Modifier) {
 
         }
 
-        if(selectedIndex == 0) {
+        if(selectedIndex == 1) {
             prueba = false
             TableScreen(prueba)
-        }else{
+        }else if(selectedIndex == 2){
             prueba = true
             TableScreen(prueba)
+        }else{
+
         }
     }
 }
