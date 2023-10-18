@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabPosition
@@ -31,29 +29,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.mvvmprueba.data.dao.ContratoDao
-import com.example.mvvmprueba.data.dao.UsuarioDao
 import com.example.mvvmprueba.data.models.Contrato
-import com.example.mvvmprueba.data.models.Usuario
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-
-
-object AppContainer {
-    val usuarioDao: UsuarioDao by lazy { UsuarioDao() }
-}
 
 object AppContainer2 {
     val contratoDao: ContratoDao by lazy { ContratoDao() }
@@ -73,7 +58,9 @@ fun ContratosScreen() {
 }
 @Composable
 fun UserDataList(modifier: Modifier) {
+
     var selectedIndex by remember { mutableIntStateOf(0) }
+    var prueba by remember { mutableStateOf(false)}
     val list = listOf("Contratos Pendientes", "Contratos Completados")
 
 
@@ -100,7 +87,7 @@ fun UserDataList(modifier: Modifier) {
                 .padding(vertical = 4.dp, horizontal = 8.dp)
                 .clip(RoundedCornerShape(15))
                 .padding(1.dp),
-            indicator = { tabPositions: List<TabPosition> ->
+            indicator = { _: List<TabPosition> ->
                 Box {}
             }
         ) {
@@ -122,62 +109,19 @@ fun UserDataList(modifier: Modifier) {
 
         }
 
-        TableScreen()
-
-    }
-}
-
-
-@Composable
-fun UserDataList() {
-    var userData by remember { mutableStateOf<List<Usuario>>(emptyList()) }
-
-    LaunchedEffect(Unit) {
-        // Utiliza un scope de corrutina para ejecutar la consulta en un hilo de fondo
-        val result = runBlocking(Dispatchers.IO) {
-            AppContainer.usuarioDao.executeQuery()
-        }
-
-        // Actualiza los datos en el hilo principal
-        userData = result
-    }
-
-    Column {
-        Text("Lista de usuarios:")
-        Spacer(modifier = Modifier.height(8.dp))
-
-        userData.forEach { user ->
-            Text("${user.idUsuario}, ${user.userName}, ${user.password}")
+        if(selectedIndex == 0) {
+            prueba = false
+            TableScreen(prueba)
+        }else{
+            prueba = true
+            TableScreen(prueba)
         }
     }
 }
 
-@Composable
-fun ContratosList(){
-    var contratoData by remember { mutableStateOf<List<Contrato>>(emptyList()) }
-
-    LaunchedEffect(Unit) {
-        // Utiliza un scope de corrutina para ejecutar la consulta en un hilo de fondo
-        val result = runBlocking(Dispatchers.IO) {
-            AppContainer2.contratoDao.probandoxd()
-        }
-
-        // Actualiza los datos en el hilo principal
-        contratoData = result
-    }
-
-    Column {
-        Text("Lista de usuarios:")
-        Spacer(modifier = Modifier.height(8.dp))
-
-        contratoData.forEach { cont ->
-            Text("${cont.idContrato}, ${cont.idSolicitudCotizacion}, ${cont.fechaContrato}")
-        }
-    }
-
-}
 
 /*
+
 @Composable
 fun probando() {
     val usuarios by remember {
@@ -194,6 +138,7 @@ fun probando() {
         }
     }
 }
+
 
 @Composable
 fun UserListItem(usuario: Usuario) {
@@ -212,23 +157,31 @@ fun UserListItem(usuario: Usuario) {
 
 */
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TableScreen() {
+fun TableScreen(prueba : Boolean) {
     // Define weights for each column
-    val column1Weight = .25f
-    val column2Weight = .25f
-    val column3Weight = .28f
-    val column4Weight = .22f
+    var column1Weight = .25f
+    var column2Weight = .25f
+    var column3Weight = .28f
+    var column4Weight = .22f
+    var column5Weight = .15f
+
+    if(prueba == true){
+        column1Weight = .20f
+        column2Weight = .20f
+        column3Weight = .21f
+        column4Weight = .24f
+        column5Weight = .15f
+    }
 
     var contratoData by remember { mutableStateOf<List<Contrato>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         // Utiliza un scope de corrutina para ejecutar la consulta en un hilo de fondo
         val result = runBlocking(Dispatchers.IO) {
-            AppContainer2.contratoDao.probandoxd()
+            AppContainer2.contratoDao.getContratos(prueba)
         }
 
         // Actualiza los datos en el hilo principal
@@ -248,10 +201,21 @@ fun TableScreen() {
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TableCell(text = "ID Contrato", weight = column1Weight, title = true)
-                    TableCell(text = "ID Cotizacion", weight = column2Weight, title = true)
-                    TableCell(text = "F Creacion", weight = column3Weight, title = true)
-                    TableCell(text = "Accion", weight = column4Weight, title = true)
+
+                    if(prueba == false) {
+
+                        TableCell(text = "ID Contrato", weight = column1Weight, title = true)
+                        TableCell(text = "ID Cotizacion", weight = column2Weight, title = true)
+                        TableCell(text = "F Creacion", weight = column3Weight, title = true)
+                        TableCell(text = "Accion", weight = column4Weight, title = true)
+
+                    }else{
+                        TableCell(text = "ID Contrato", weight = column1Weight, title = true)
+                        TableCell(text = "ID Personal", weight = column2Weight, title = true)
+                        TableCell(text = "ID Solicitante", weight = column3Weight, title = true)
+                        TableCell(text = "F Registro", weight = column4Weight, title = true)
+                        TableCell(text = "Accion", weight = column5Weight, title = true)
+                    }
                 }
 
                 // Divider line
@@ -270,10 +234,19 @@ fun TableScreen() {
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TableCell(text = contrato.idContrato.toString(), weight = column1Weight)
-                    TableCell(text = contrato.idSolicitudCotizacion.toString(), weight = column2Weight)
-                    StatusCell(text = contrato.fechaContrato.toString(), weight = column3Weight)
-                    TableCell(text = "holi", weight = column4Weight)
+
+                    if(prueba == false) {
+                        TableCell(text = contrato.idContrato.toString(), weight = column1Weight)
+                        TableCell(text = contrato.idSolicitudCotizacion.toString(), weight = column2Weight)
+                        TableCell(text = contrato.fechaContrato.toString(), weight = column3Weight)
+                        TableCell(text = "FIRMAR", weight = column4Weight)
+                    }else{
+                        TableCell(text = contrato.idContrato.toString(), weight = column1Weight)
+                        TableCell(text = contrato.idPersonal.toString(), weight = column2Weight)
+                        TableCell(text = contrato.idSolicitante.toString(), weight = column3Weight)
+                        TableCell(text = contrato.fechaRegistro.toString(), weight = column4Weight)
+                        TableCell(text = "VER", weight = column5Weight)
+                    }
                 }
 
                 // Divider line
@@ -305,7 +278,7 @@ fun RowScope.TableCell(
         textAlign = alignment,
     )
 }
-
+/*
 @Composable
 fun RowScope.StatusCell(
     text: String,
@@ -314,14 +287,12 @@ fun RowScope.StatusCell(
 ) {
 
     val color = when (text) {
-        "Pending" -> Color(0xfff8deb5)
-        "Paid" -> Color(0xffadf7a4)
-        else -> Color(0xffffcccf)
+        "" -> Color(0xffffcccf)
+        else -> Color(0xffadf7a4)
     }
     val textColor = when (text) {
-        "Pending" -> Color(0xffde7a1d)
-        "Paid" -> Color(0xff00ad0e)
-        else -> Color(0xffca1e17)
+        "" -> Color(0xffca1e17)
+        else -> Color(0xff00ad0e)
     }
 
     Text(
@@ -335,7 +306,7 @@ fun RowScope.StatusCell(
     )
 }
 
-
+*/
 
 @Preview(showBackground = true)
 @Composable

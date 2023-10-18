@@ -30,7 +30,7 @@ class UsuarioDao  @Inject constructor(){
         return result
     }
 
-/*
+
     fun getAllUsuarios(): List<Usuario> {
         return runBlocking {
             withContext(Dispatchers.IO) {
@@ -51,7 +51,7 @@ class UsuarioDao  @Inject constructor(){
         }
     }
 
-*/
+
     fun checkUserCredentials(username: String, password: String): Boolean {
         var userExists = false
 

@@ -23,5 +23,4 @@ class ClientViewModel @Inject constructor() : ViewModel(){
         _isLoading.value = false
     }
 
-
 }
