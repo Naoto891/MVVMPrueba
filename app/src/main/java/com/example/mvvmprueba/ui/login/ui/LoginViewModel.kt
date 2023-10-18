@@ -1,13 +1,19 @@
+// LoginViewModel.kt
 package com.example.mvvmprueba.ui.login.ui
-
-import android.util.Patterns
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.delay
+import androidx.lifecycle.viewModelScope
+import com.example.mvvmprueba.ui.login.domain.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel(){
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val loginUseCase : LoginUseCase): ViewModel() {
 
     private val _email = MutableLiveData<String>()
     val email: LiveData<String> = _email
@@ -25,20 +31,26 @@ class LoginViewModel : ViewModel(){
     val isLoggedIn: LiveData<Boolean> = _isLoggedIn
 
 
-    fun onLoginChanged (email: String, password: String){
+
+    fun onLoginChanged(email: String, password: String) {
         _email.value = email
         _password.value = password
         _loginEnable.value = isValidEmail(email) && isValidPassword(password)
     }
-    private fun isValidPassword(password: String): Boolean = password.length >6
-    private fun isValidEmail(email: String): Boolean = Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
+    private fun isValidPassword(password: String): Boolean = password.length > 3
+    private fun isValidEmail(email: String): Boolean = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
-    suspend fun onLoginSelected() {
+    fun onLoginSelected() {
         _isLoading.value = true
-        delay(1000)
-        _isLoggedIn.value = true
-        _isLoading.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            val username = email.value.orEmpty()
+            val userPassword = password.value.orEmpty()
+            val authenticated = loginUseCase(username, userPassword)
+
+            _isLoggedIn.postValue(authenticated)
+            _isLoading.postValue(false)
+        }
     }
 
 }

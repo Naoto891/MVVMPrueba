@@ -3,12 +3,11 @@ package com.example.mvvmprueba.ui.vistacliente.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-
-class ClientViewModel : ViewModel(){
-
-  //  private val _contratoEnable = MutableLiveData<Boolean>()
-   // val contratoEnable: LiveData<Boolean> = _contratoEnable
+import javax.inject.Inject
+@HiltViewModel
+class ClientViewModel @Inject constructor() : ViewModel(){
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

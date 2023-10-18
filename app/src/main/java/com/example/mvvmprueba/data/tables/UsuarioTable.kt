@@ -1,4 +1,4 @@
-package com.example.mvvmprueba.data.models
+package com.example.mvvmprueba.data.tables
 
 import org.jetbrains.exposed.sql.Table
 

@@ -35,7 +35,6 @@ fun ClientScreen(viewModel: ClientViewModel) {
 @Composable
 fun Client(modifier: Modifier, viewModel: ClientViewModel) {
 
-    //val contratoEnable: Boolean by viewModel.contratoEnable.observeAsState(initial = false)
     val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val isContratoIn: Boolean by viewModel.isContratoIn.observeAsState(initial = false)
     val coroutineScope = rememberCoroutineScope()

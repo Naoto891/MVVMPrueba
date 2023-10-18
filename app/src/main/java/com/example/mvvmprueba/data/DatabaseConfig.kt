@@ -1,4 +1,4 @@
-package com.example.mvvmprueba.config
+package com.example.mvvmprueba.data
 
 import org.jetbrains.exposed.sql.Database
 
